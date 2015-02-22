@@ -12,6 +12,8 @@ class AppViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "userDidLogin", name: userDidLoginNotification, object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -19,10 +21,14 @@ class AppViewController: UIViewController {
     }
     
     @IBAction func onLogin(sender: AnyObject) {
-        TwitterClient.sharedInstance.clearToken()
-        TwitterClient.sharedInstance.getRequestToken()
+        User.login()
     }
 
+    func userDidLogin() {
+        println("User did login notified")
+        performSegueWithIdentifier("HomeTimeline", sender: self)
+    }
+    
     /*
     // MARK: - Navigation
 

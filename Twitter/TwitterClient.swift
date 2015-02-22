@@ -10,27 +10,44 @@ import UIKit
 
 let consumerKey = "Dn1JiiaEiJ1aEzL6JWLkCHWLz"
 let consumeSecret = "2K0aBlXWYThyyDRfzvcpFyXlddnJCRAaEzt91VfBPLmDHIjVlh"
-let baseUrl = NSURL(string: "https://api.twitter.com")
+let baseUrl = "https://api.twitter.com"
 
 class TwitterClient: BDBOAuth1RequestOperationManager {
     
     class var sharedInstance: TwitterClient {
         struct Static {
-            static let instance = TwitterClient(baseURL: baseUrl, consumerKey: consumerKey, consumerSecret: consumeSecret)
+            static let instance = TwitterClient(baseURL: NSURL(string: baseUrl), consumerKey: consumerKey, consumerSecret: consumeSecret)
         }
         
         return Static.instance
     }
     
     func getRequestToken() {
-        TwitterClient.sharedInstance.fetchRequestTokenWithPath("oauth/request_token", method: "GET", callbackURL: NSURL(string: "cptwitterdemo://oauth"), scope: nil, success: { (requestToken: BDBOAuth1Credential!) -> Void in
-            println("Got request token \(requestToken)")
-            }) { (error: NSError!) -> Void in
+        requestSerializer.removeAccessToken()
+        fetchRequestTokenWithPath("oauth/request_token", method: "POST", callbackURL: NSURL(string: "cptwitterdemo://oauth"), scope: nil, success: {
+            (requestToken: BDBOAuth1Credential!) -> Void in
+            var authUrl = "\(baseUrl)/oauth/authorize?oauth_token=\(requestToken.token)"
+            UIApplication.sharedApplication().openURL(NSURL(string: authUrl)!)
+         }) { (error: NSError!) -> Void in
             println("Request oauth token error")
         }
     }
     
-    func clearToken() {
-        TwitterClient.sharedInstance.requestSerializer.removeAccessToken()
+    func fetchAccessToken(requestToken: BDBOAuth1Credential!) {
+        fetchAccessTokenWithPath("oauth/access_token", method: "POST", requestToken: requestToken, success: {
+            (accessToken: BDBOAuth1Credential!) -> Void in
+            self.requestSerializer.saveAccessToken(accessToken)
+            User.retrieveCurrentUser()
+            }) { (error: NSError!) -> Void in
+                println("Failed to get access token")
+        }
+    }
+    
+    func performWithCompletion(url: String, params: NSDictionary?, completion: (result: AnyObject?, error: NSError?) -> Void) {
+        GET(url, parameters: params, success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
+            completion(result: response, error: nil)
+        }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
+            completion(result: nil, error: error)
+        })
     }
 }

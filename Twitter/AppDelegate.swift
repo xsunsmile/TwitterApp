@@ -12,11 +12,27 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
+    var storyBoard = UIStoryboard(name: "Main", bundle: nil)
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        
+        println("didFinishLaunchingWithOptions")
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "userDidLogout", name: userDidLogoutNotification, object: nil)
+        
+        if User.currentUser != nil {
+            println("Got current user: \(User.currentUser?.name())")
+            var navigationController = window?.rootViewController as UINavigationController
+            var vc = storyBoard.instantiateViewControllerWithIdentifier("HomeTimelineController") as UIViewController
+            navigationController.pushViewController(vc, animated: false)
+        } else {
+            println("There is not current user")
+        }
         return true
+    }
+    
+    func userDidLogout() {
+        window?.rootViewController = storyBoard.instantiateInitialViewController() as? UIViewController
     }
 
     func applicationWillResignActive(application: UIApplication) {
@@ -41,6 +57,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
 
-
+    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
+        TwitterClient.sharedInstance.fetchAccessToken(BDBOAuth1Credential(queryString: url.query))
+        return true
+    }
 }
 
