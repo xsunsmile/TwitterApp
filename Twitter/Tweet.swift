@@ -12,6 +12,7 @@ class Tweet: NSObject {
     var dictionary: NSDictionary?
     var dateFormatter = NSDateFormatter()
     var displayDateFormatter = NSDateFormatter()
+    var retweetId: NSInteger?
     
     init(dictionary: NSDictionary) {
         super.init()
@@ -101,6 +102,83 @@ class Tweet: NSObject {
                 println("tweet successful")
             } else {
                 println(error)
+            }
+        }
+    }
+    
+    func reTweet() {
+        let url = "1.1/statuses/retweet/\(getId()).json"
+        TwitterClient.sharedInstance.performPOSTWithCompletion(url, params: nil) {
+            (result, error) -> Void in
+            if result != nil {
+                println("retweeted")
+                if let d = result as? NSDictionary {
+                    if let i = d["id"] as? NSInteger {
+                        self.retweetId = i
+                    }
+                }
+                self.refresh()
+            } else {
+                println("retweet failed")
+            }
+        }
+    }
+    
+    func deleteReTweet() {
+        if retweetId != nil {
+            let url = "1.1/statuses/destroy/\(retweetId).json"
+            TwitterClient.sharedInstance.performPOSTWithCompletion(url, params: nil) {
+                (result, error) -> Void in
+                if result != nil {
+                    println("deleted retweet")
+                    self.refresh()
+                } else {
+                    println("delete retweet failed")
+                }
+            }
+        }
+    }
+    
+    func makeFavorite() {
+        let url = "1.1/favorites/create.json"
+        let params = ["id": getId()]
+        TwitterClient.sharedInstance.performPOSTWithCompletion(url, params: params) {
+            (result, error) -> Void in
+            if result != nil {
+                println("favorited")
+                self.refresh()
+            } else {
+                println("favorite failed")
+            }
+        }
+    }
+    
+    func unfavorite() {
+        let url = "1.1/favorites/destroy.json"
+        let params = ["id": getId()]
+        TwitterClient.sharedInstance.performPOSTWithCompletion(url, params: params) {
+            (result, error) -> Void in
+            if result != nil {
+                println("unfavorited")
+                self.refresh()
+            } else {
+                println("unfavorite failed")
+            }
+        }
+    }
+    
+    func refresh() {
+        let url = "1.1/statuses/show.json"
+        let params = ["id": getId()]
+        TwitterClient.sharedInstance.performWithCompletion(url, params: params) {
+            (result, error) -> Void in
+            if result != nil {
+                if let d = result as? NSDictionary {
+                    println("refreshed")
+                    self.dictionary = d
+                }
+            } else {
+                println("refresh failed")
             }
         }
     }

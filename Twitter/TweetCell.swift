@@ -15,8 +15,8 @@ class TweetCell: UITableViewCell {
     @IBOutlet weak var userScreenNameLabel: UILabel!
     @IBOutlet weak var tweetCreatedAt: UILabel!
     @IBOutlet weak var userImageView: UIImageView!
-    @IBOutlet weak var favoriteImageView: UIImageView!
-    @IBOutlet weak var retweetImageView: UIImageView!
+    @IBOutlet weak var reTweetButton: UIButton!
+    @IBOutlet weak var favoriteButton: UIButton!
     
     var tweet: Tweet? {
         didSet {
@@ -31,15 +31,51 @@ class TweetCell: UITableViewCell {
             
             if let favorited = tweet?.favorited() {
                 if favorited > 0 {
-                    favoriteImageView.image = UIImage(named: "Favorited")
+                    favoriteButton.setBackgroundImage(UIImage(named: "Favorited"), forState: UIControlState.Normal)
                 }
             }
             
             if let retweeted = tweet?.retweeted() {
                 if retweeted > 0 {
-                    retweetImageView.image = UIImage(named: "Retweeted")
+                    reTweetButton.setBackgroundImage(UIImage(named: "Retweeted"), forState: UIControlState.Normal)
                 }
             }
+        }
+    }
+    
+    func reTweet() {
+        if retweeted() {
+            reTweetButton.setBackgroundImage(UIImage(named: "Retweet"), forState: UIControlState.Normal)
+            tweet?.deleteReTweet()
+        } else {
+            reTweetButton.setBackgroundImage(UIImage(named: "Retweeted"), forState: UIControlState.Normal)
+            tweet?.reTweet()
+        }
+    }
+    
+    func makeFavorite() {
+        if favorited() {
+            favoriteButton.setBackgroundImage(UIImage(named: "Favorite"), forState: UIControlState.Normal)
+            tweet?.unfavorite()
+        } else {
+            favoriteButton.setBackgroundImage(UIImage(named: "Favorited"), forState: UIControlState.Normal)
+            tweet?.makeFavorite()
+        }
+    }
+    
+    func favorited() -> Bool {
+        if let favorited = tweet?.favorited() {
+            return favorited > 0
+        } else {
+            return false
+        }
+    }
+    
+    func retweeted() -> Bool {
+        if let retweeted = tweet?.retweeted() {
+            return retweeted > 0
+        } else {
+            return false
         }
     }
     
