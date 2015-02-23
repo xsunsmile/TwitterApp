@@ -17,11 +17,16 @@ class HomeTimelineViewController: UIViewController,
     @IBOutlet weak var tableView: UITableView!
     var tweets = Tweets()
     var homeTimelineTweets: [Tweet] = []
+    var refreshControl: UIRefreshControl?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tweets.getHomeTimeline()
+        navigationController!.navigationBar.barStyle = UIBarStyle.Black
+        navigationController!.navigationBar.tintColor = UIColor.whiteColor()
+        navigationController!.navigationBar.barTintColor = UIColor(red: 0.42, green: 0.60, blue: 0.98, alpha: 1.0)
+        
+        refresh()
         
         tableView.delegate = self
         tableView.dataSource = self
@@ -29,6 +34,15 @@ class HomeTimelineViewController: UIViewController,
         tableView.estimatedRowHeight = 90
         
         tweets.delegate = self
+        
+        refreshControl = UIRefreshControl()
+        refreshControl?.attributedTitle = NSAttributedString(string: "Pull to refersh")
+        refreshControl?.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
+        tableView.addSubview(refreshControl!)
+    }
+    
+    func refresh() {
+        tweets.getHomeTimeline()
     }
 
     override func didReceiveMemoryWarning() {
@@ -37,6 +51,10 @@ class HomeTimelineViewController: UIViewController,
     
     @IBAction func onLogout(sender: AnyObject) {
         User.logout()
+    }
+    
+    @IBAction func onTweet(sender: AnyObject) {
+        performSegueWithIdentifier("tweetSegue", sender: self)
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -51,13 +69,16 @@ class HomeTimelineViewController: UIViewController,
     
     func tweetsAreReady(tweets: [Tweet]) {
         homeTimelineTweets = tweets
-        println("loaded \(homeTimelineTweets.count) tweets")
+        refreshControl?.endRefreshing()
         tableView.reloadData()
     }
 
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        var vc = segue.destinationViewController as TweetDetailsViewController
-        var indexPath = tableView.indexPathForCell(sender as UITableViewCell)!
-        vc.tweet = homeTimelineTweets[indexPath.row]
+        if segue.identifier == "tweetDetailsSegue" {
+            var vc = segue.destinationViewController as TweetDetailsViewController
+            let indexPath = tableView.indexPathForCell(sender as UITableViewCell)!
+            let tweet = homeTimelineTweets[indexPath.row]
+            vc.tweet = tweet
+        }
     }
 }

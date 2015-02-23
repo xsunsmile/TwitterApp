@@ -65,6 +65,10 @@ class Tweet: NSObject {
         return createdAt
     }
     
+    func getId() -> NSInteger {
+        return getProperty("id") as NSInteger
+    }
+    
     func user() -> User? {
         var owner: User?
         if let u = getProperty("user") as? NSDictionary {
@@ -84,5 +88,20 @@ class Tweet: NSObject {
     
     func getProperty(key: NSString) -> AnyObject? {
         return dictionary![key]
+    }
+    
+    func replyTweetWithMessage(message: NSString) {
+        var params = NSMutableDictionary()
+        params["status"] = message
+        params["in_reply_to_status_id"] = getId()
+        
+        TwitterClient.sharedInstance.performPOSTWithCompletion("1.1/statuses/update.json", params: params) {
+            (result, error) -> Void in
+            if result != nil {
+                println("tweet successful")
+            } else {
+                println(error)
+            }
+        }
     }
 }

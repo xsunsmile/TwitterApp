@@ -50,4 +50,13 @@ class TwitterClient: BDBOAuth1RequestOperationManager {
             completion(result: nil, error: error)
         })
     }
+    
+    func performPOSTWithCompletion(url: String, params: NSDictionary?, completion: (result: AnyObject?, error: NSError?) -> Void) {
+        //        var data = NSJSONSerialization.dataWithJSONObject(params!, options: nil, error: nil)
+        POST(url, parameters: params, success: { (operation: AFHTTPRequestOperation!, response: AnyObject!) -> Void in
+            completion(result: response, error: nil)
+        }, failure: { (operation: AFHTTPRequestOperation!, error: NSError!) -> Void in
+            completion(result: nil, error: error)
+        })
+    }
 }
