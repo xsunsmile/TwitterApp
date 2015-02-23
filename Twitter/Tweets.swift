@@ -7,29 +7,26 @@
 //
 
 import UIKit
-var homeTimelineTweets: NSMutableArray = []
+
+protocol TweetsDelegate: class {
+    func tweetsAreReady(tweets:[Tweet])
+}
 
 class Tweets: NSObject {
+    weak var delegate: TweetsDelegate?
     
-    init(tweets: [NSDictionary]) {
-        super.init()
-        for tweet in tweets {
-            homeTimelineTweets.addObject(Tweet(dictionary: tweet))
-        }
-    }
-    
-    class func getHomeTimeline() {
+    func getHomeTimeline() {
         TwitterClient.sharedInstance.performWithCompletion("1.1/statuses/home_timeline.json", params: nil) {
             (result, error) -> Void in
             if result != nil {
                 if let tweets = result as? [NSDictionary] {
-                    Tweets(tweets: tweets)
+                    var homeTimelineTweets: [Tweet] = []
+                    for tweet in tweets {
+                        homeTimelineTweets.append(Tweet(dictionary: tweet))
+                    }
+                    self.delegate?.tweetsAreReady(homeTimelineTweets)
                 }
             }
         }
-    }
-    
-    class func tweets() -> NSMutableArray {
-        return homeTimelineTweets
     }
 }

@@ -24,6 +24,18 @@ class User: NSObject {
         return getProperty("name") as NSString
     }
     
+    func screenName() -> NSString {
+        return getProperty("screen_name") as NSString
+    }
+    
+    func imageUrl() -> NSURL? {
+        var url: NSURL?
+        if let urlStr = getProperty("profile_image_url") as? NSString {
+            url = NSURL(string: urlStr)
+        }
+        return url
+    }
+    
     func getProperty(key: NSString) -> AnyObject? {
         return dictionary![key]
     }

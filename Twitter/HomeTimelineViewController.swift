@@ -10,15 +10,25 @@ import UIKit
 
 class HomeTimelineViewController: UIViewController,
                                   UITableViewDelegate,
-                                  UITableViewDataSource
+                                  UITableViewDataSource,
+                                  TweetsDelegate
 {
 
     @IBOutlet weak var tableView: UITableView!
+    var tweets = Tweets()
+    var homeTimelineTweets: [Tweet] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        tweets.getHomeTimeline()
+        
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 90
+        
+        tweets.delegate = self
     }
 
     override func didReceiveMemoryWarning() {
@@ -30,21 +40,24 @@ class HomeTimelineViewController: UIViewController,
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        return UITableViewCell()
+        var cell = tableView.dequeueReusableCellWithIdentifier("TweetCell") as TweetCell
+        cell.tweet = homeTimelineTweets[indexPath.row]
+        return cell
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return homeTimelineTweets.count
+    }
+    
+    func tweetsAreReady(tweets: [Tweet]) {
+        homeTimelineTweets = tweets
+        println("loaded \(homeTimelineTweets.count) tweets")
+        tableView.reloadData()
     }
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        var vc = segue.destinationViewController as TweetDetailsViewController
+        var indexPath = tableView.indexPathForCell(sender as UITableViewCell)!
+        vc.tweet = homeTimelineTweets[indexPath.row]
     }
-    */
-
 }

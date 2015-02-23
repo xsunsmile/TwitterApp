@@ -26,7 +26,7 @@ class AppViewController: UIViewController {
 
     func userDidLogin() {
         println("User did login notified")
-        performSegueWithIdentifier("HomeTimeline", sender: self)
+        performSegueWithIdentifier("HomeTimelineSegue", sender: self)
     }
     
     /*
