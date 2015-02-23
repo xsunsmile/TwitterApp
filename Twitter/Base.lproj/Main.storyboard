@@ -121,7 +121,7 @@
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
                                                     <connections>
-                                                        <action selector="onRetweet:" destination="a7m-3F-1B8" eventType="touchUpInside" id="Z88-eN-95e"/>
+                                                        <action selector="reTweet:" destination="ooa-uL-uAs" eventType="touchUpInside" id="pJ1-pj-yZZ"/>
                                                     </connections>
                                                 </button>
                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UTC-gu-cYF">
@@ -134,7 +134,7 @@
                                                         <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                                     </state>
                                                     <connections>
-                                                        <action selector="onFavorite:" destination="a7m-3F-1B8" eventType="touchUpInside" id="AbS-Zv-2D7"/>
+                                                        <action selector="makeFavorite:" destination="ooa-uL-uAs" eventType="touchUpInside" id="YQI-eM-viJ"/>
                                                     </connections>
                                                 </button>
                                             </subviews>
@@ -164,6 +164,7 @@
                                         <connections>
                                             <outlet property="favoriteButton" destination="UTC-gu-cYF" id="h5W-QR-xEE"/>
                                             <outlet property="reTweetButton" destination="jMF-vX-Axp" id="fDY-y4-Rtv"/>
+                                            <outlet property="replyButton" destination="PJg-bn-bmI" id="2nw-8j-dHE"/>
                                             <outlet property="tweetCreatedAt" destination="ult-Qm-lsQ" id="ceg-gf-Yv0"/>
                                             <outlet property="tweetText" destination="nNL-vy-O2U" id="3oS-f9-ocP"/>
                                             <outlet property="userImageView" destination="yKG-1a-EnJ" id="arR-JF-UeP"/>

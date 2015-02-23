@@ -126,7 +126,7 @@ class Tweet: NSObject {
     
     func deleteReTweet() {
         if retweetId != nil {
-            let url = "1.1/statuses/destroy/\(retweetId).json"
+            let url = "1.1/statuses/destroy/\(retweetId!).json"
             TwitterClient.sharedInstance.performPOSTWithCompletion(url, params: nil) {
                 (result, error) -> Void in
                 if result != nil {
@@ -134,6 +134,7 @@ class Tweet: NSObject {
                     self.refresh()
                 } else {
                     println("delete retweet failed")
+                    println(error)
                 }
             }
         }

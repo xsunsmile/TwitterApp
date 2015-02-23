@@ -17,6 +17,7 @@ class TweetCell: UITableViewCell {
     @IBOutlet weak var userImageView: UIImageView!
     @IBOutlet weak var reTweetButton: UIButton!
     @IBOutlet weak var favoriteButton: UIButton!
+    @IBOutlet weak var replyButton: UIButton!
     
     var tweet: Tweet? {
         didSet {
@@ -43,23 +44,23 @@ class TweetCell: UITableViewCell {
         }
     }
     
-    func reTweet() {
-        if retweeted() {
-            reTweetButton.setBackgroundImage(UIImage(named: "Retweet"), forState: UIControlState.Normal)
-            tweet?.deleteReTweet()
-        } else {
-            reTweetButton.setBackgroundImage(UIImage(named: "Retweeted"), forState: UIControlState.Normal)
-            tweet?.reTweet()
-        }
-    }
-    
-    func makeFavorite() {
+    @IBAction func makeFavorite(sender: AnyObject) {
         if favorited() {
             favoriteButton.setBackgroundImage(UIImage(named: "Favorite"), forState: UIControlState.Normal)
             tweet?.unfavorite()
         } else {
             favoriteButton.setBackgroundImage(UIImage(named: "Favorited"), forState: UIControlState.Normal)
             tweet?.makeFavorite()
+        }
+    }
+    
+    @IBAction func reTweet(sender: AnyObject) {
+        if retweeted() {
+            reTweetButton.setBackgroundImage(UIImage(named: "Retweet"), forState: UIControlState.Normal)
+            tweet?.deleteReTweet()
+        } else {
+            reTweetButton.setBackgroundImage(UIImage(named: "Retweeted"), forState: UIControlState.Normal)
+            tweet?.reTweet()
         }
     }
     

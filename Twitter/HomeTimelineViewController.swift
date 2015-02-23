@@ -75,18 +75,6 @@ class HomeTimelineViewController: UIViewController,
         tableView.reloadData()
     }
     
-    @IBAction func onRetweet(sender: AnyObject) {
-        let button = sender as UIButton
-        let cell = button.superview!.superview as TweetCell
-        cell.reTweet()
-    }
-    
-    @IBAction func onFavorite(sender: AnyObject) {
-        let button = sender as UIButton
-        let cell = button.superview!.superview as TweetCell
-        cell.makeFavorite()
-    }
-    
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "tweetDetailsSegue" {
             var vc = segue.destinationViewController as TweetDetailsViewController
