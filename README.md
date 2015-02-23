@@ -1,5 +1,5 @@
 # Time
-- Finished requirements: 20 hours
+- Finished requirements: 15 hours
 - Finished optionals: 30 min
 
 # Tasks
@@ -15,3 +15,4 @@
 - [x] User should be able to unfavorite
 
 # WalkThroughs
+![walkThroughImage](https://raw.githubusercontent.com/xsunsmile/TwitterApp/master/walkThrough.gif)
