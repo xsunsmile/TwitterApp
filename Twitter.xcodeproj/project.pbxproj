@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9309055F1AA2CE0B00DC0B30 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9309055E1AA2CE0B00DC0B30 /* ProfileViewController.swift */; };
 		931DCBEE1A9646890097A460 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 931DCBED1A9646890097A460 /* AppDelegate.swift */; };
 		931DCBF31A9646890097A460 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 931DCBF11A9646890097A460 /* Main.storyboard */; };
 		931DCBF51A9646890097A460 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 931DCBF41A9646890097A460 /* Images.xcassets */; };
@@ -40,6 +41,7 @@
 		1F923ADF92745BDA9E3147BF /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		386EFC7352AC561CF7FCC65A /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		800C365A1814415D14D506C9 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		9309055E1AA2CE0B00DC0B30 /* ProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		931DCBE81A9646890097A460 /* Twitter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Twitter.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		931DCBEC1A9646890097A460 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		931DCBED1A9646890097A460 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -173,6 +175,7 @@
 			children = (
 				93D659E61A964BD3005EC6E1 /* AppViewController.swift */,
 				934B48081AA046680099EFEC /* MainViewController.swift */,
+				9309055E1AA2CE0B00DC0B30 /* ProfileViewController.swift */,
 				934B480A1AA047120099EFEC /* BergerViewController.swift */,
 				93E4F0F81A99AB6A00DB5642 /* HomeTimelineViewController.swift */,
 				93A991701A9A8BB100EE6229 /* TweetDetailsViewController.swift */,
@@ -345,6 +348,7 @@
 				93A991711A9A8BB100EE6229 /* TweetDetailsViewController.swift in Sources */,
 				93E4F0F91A99AB6A00DB5642 /* HomeTimelineViewController.swift in Sources */,
 				93D659E41A964941005EC6E1 /* TwitterClient.swift in Sources */,
+				9309055F1AA2CE0B00DC0B30 /* ProfileViewController.swift in Sources */,
 				931DCBEE1A9646890097A460 /* AppDelegate.swift in Sources */,
 				93E4F0F71A99628800DB5642 /* Tweets.swift in Sources */,
 			);

@@ -36,6 +36,15 @@ class User: NSObject {
         return url
     }
     
+    func largeImageUrl() -> NSURL? {
+        var url: NSURL?
+        if let urlStr = getProperty("profile_image_url") as? NSString {
+            var largeUrlStr = urlStr.stringByReplacingOccurrencesOfString("_normal", withString: "_bigger")
+            url = NSURL(string: largeUrlStr)
+        }
+        return url
+    }
+    
     func getProperty(key: NSString) -> AnyObject? {
         return dictionary![key]
     }
@@ -65,13 +74,13 @@ class User: NSObject {
     
     class var currentUser: User? {
         get {
-            if _currentUser == nil {
-                if let data = NSUserDefaults.standardUserDefaults().objectForKey(currentUserKey) as? NSData {
-                    var dictionary = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: nil) as NSDictionary
-                    _currentUser = User(dictionary: dictionary)
-                }
-            }
-            return _currentUser
+        if _currentUser == nil {
+        if let data = NSUserDefaults.standardUserDefaults().objectForKey(currentUserKey) as? NSData {
+        var dictionary = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: nil) as NSDictionary
+        _currentUser = User(dictionary: dictionary)
+        }
+        }
+        return _currentUser
         }
         
         set(user) {

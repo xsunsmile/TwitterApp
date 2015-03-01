@@ -8,14 +8,18 @@
 
 import UIKit
 
-class MainViewController: UIViewController
+class MainViewController: UIViewController,
+                          MenuDelegate
 {
 
     var storyBoard = UIStoryboard(name: "Main", bundle: nil)
+    var viewInContainer = "HomeTimelineNav"
+    
     var homeTimelineNavVC: UINavigationController?
     var burgerNavVC: UINavigationController?
+    var profileNavVC: UINavigationController?
+    
     var menuIsOpen = false
-    var originalContainerCenterX: CGFloat?
     var dragBeganPointX: CGFloat?
     
     @IBOutlet weak var containerView: UIView!
@@ -24,6 +28,7 @@ class MainViewController: UIViewController
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        applyPlainShadow(containerView)
         initMenuView()
         initTimelineView()
     }
@@ -32,8 +37,19 @@ class MainViewController: UIViewController
         super.didReceiveMemoryWarning()
     }
     
+    func applyPlainShadow(view: UIView) {
+        var layer = view.layer
+        
+        layer.shadowColor = UIColor.blackColor().CGColor
+        layer.shadowOpacity = 0.4
+        layer.shadowRadius = 2
+    }
+    
     func initMenuView() {
         burgerNavVC = storyBoard.instantiateViewControllerWithIdentifier("BergerViewNav") as? UINavigationController
+        let burgerVC = burgerNavVC?.childViewControllers[0] as BergerViewController
+        burgerVC.delegate = self
+        
         addChildViewController(burgerNavVC!)
         burgerNavVC?.view.frame = menuView.bounds
         
@@ -42,13 +58,25 @@ class MainViewController: UIViewController
     }
     
     func initTimelineView() {
+        removeSubviewFromContainer()
+        viewInContainer = "HomeTimelineNav"
         homeTimelineNavVC = storyBoard.instantiateViewControllerWithIdentifier("HomeTimelineNav") as? UINavigationController
         addChildViewController(homeTimelineNavVC!)
         homeTimelineNavVC?.view.frame = containerView.bounds
         
         containerView.addSubview(homeTimelineNavVC!.view)
         homeTimelineNavVC?.didMoveToParentViewController(self)
-        originalContainerCenterX = containerView.center.x
+    }
+    
+    func initProfileView() {
+        removeSubviewFromContainer()
+        viewInContainer = "ProfileNavController"
+        profileNavVC = storyBoard.instantiateViewControllerWithIdentifier("ProfileNavController") as? UINavigationController
+        addChildViewController(profileNavVC!)
+        profileNavVC?.view.frame = containerView.bounds
+        
+        containerView.addSubview(profileNavVC!.view)
+        profileNavVC?.didMoveToParentViewController(self)
     }
     
     @IBAction func onContainerViewDrag(sender: UIPanGestureRecognizer) {
@@ -63,7 +91,7 @@ class MainViewController: UIViewController
                     self.containerView.transform = CGAffineTransformMakeTranslation(point.x - self.dragBeganPointX!, 0)
                 })
             } else if sender.state == .Ended {
-                openMenu(velocity)
+                openMenu()
             }
         } else if velocity.x < 0 && menuIsOpen {
             if sender.state == .Began {
@@ -73,23 +101,53 @@ class MainViewController: UIViewController
                     self.containerView.transform = CGAffineTransformMakeTranslation(point.x - self.dragBeganPointX!, 0)
                 })
             } else if sender.state == .Ended {
-                closeMenu(velocity)
+                closeMenu()
             }
         }
     }
     
-    func closeMenu(velocity: CGPoint) {
+    func closeMenu() {
         UIView.animateWithDuration(1, animations: { () -> Void in
+            self.menuView.alpha = 0
             self.containerView.transform = CGAffineTransformIdentity
         })
         self.menuIsOpen = false
     }
     
-    func openMenu(velocity: CGPoint) {
+    func openMenu() {
         UIView.animateWithDuration(1, animations: { () -> Void in
+            self.menuView.alpha = 1
             self.containerView.transform = CGAffineTransformMakeTranslation(300, 0)
         })
         self.menuIsOpen = true
+    }
+    
+    func removeSubviewFromContainer() {
+        switch(viewInContainer) {
+        case "HomeTimelineNav":
+            if homeTimelineNavVC != nil {
+                removeVC(homeTimelineNavVC!)
+            }
+            break
+        case "ProfileNavController":
+            if profileNavVC != nil {
+                removeVC(profileNavVC!)
+            }
+            break
+        default:
+            println()
+        }
+    }
+    
+    func removeVC(vc: UIViewController) {
+        vc.willMoveToParentViewController(nil)
+        vc.view.removeFromSuperview()
+        vc.removeFromParentViewController()
+    }
+    
+    func onProfileImageTouched() {
+        closeMenu()
+        initProfileView()
     }
     
     /*

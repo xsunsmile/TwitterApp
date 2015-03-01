@@ -27,7 +27,7 @@ class HomeTimelineViewController: UIViewController,
         
         navigationController!.navigationBar.barStyle = UIBarStyle.Black
         navigationController!.navigationBar.tintColor = UIColor.whiteColor()
-        navigationController!.navigationBar.barTintColor = UIColor(red: 0.42, green: 0.60, blue: 0.98, alpha: 1.0)
+        navigationController!.navigationBar.barTintColor = UIColor(red: 0.07, green: 0.56, blue: 0.85, alpha: 1.0)
         
         refresh()
         
