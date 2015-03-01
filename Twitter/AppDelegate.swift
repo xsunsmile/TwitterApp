@@ -22,7 +22,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         if User.currentUser != nil {
             println("Got current user: \(User.currentUser?.name())")
-            var vc = storyBoard.instantiateViewControllerWithIdentifier("HomeTimelineNav") as UIViewController
+            var vc = storyBoard.instantiateViewControllerWithIdentifier("MainViewController") as UIViewController
+//            var vc = storyBoard.instantiateViewControllerWithIdentifier("BergerViewController") as UIViewController
             window?.rootViewController = vc
         } else {
             println("There is not current user")

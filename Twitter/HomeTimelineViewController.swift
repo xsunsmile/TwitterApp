@@ -18,6 +18,9 @@ class HomeTimelineViewController: UIViewController,
     var tweets = Tweets()
     var homeTimelineTweets: [Tweet] = []
     var refreshControl: UIRefreshControl?
+    @IBOutlet var edgePanGR: UIScreenEdgePanGestureRecognizer!
+    var originalViewCenter = CGFloat(0)
+    var menuIsClosed = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,7 +34,6 @@ class HomeTimelineViewController: UIViewController,
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.estimatedRowHeight = 90
         
         tweets.delegate = self
         
@@ -39,6 +41,8 @@ class HomeTimelineViewController: UIViewController,
         refreshControl?.attributedTitle = NSAttributedString(string: "Pull to refersh")
         refreshControl?.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
         tableView.addSubview(refreshControl!)
+        
+        originalViewCenter = view.center.x
     }
     
     func refresh() {
