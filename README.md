@@ -3,13 +3,18 @@
 - Finished optionals: 30 min
 
 # Tasks
-- [x] User can sign in using OAuth login flow
-- [x] User can view last 20 tweets from their home timeline
-- [x] The current signed in user will be persisted across restarts
-- [x] In the home timeline, user can view tweet with the user profile picture, username, tweet text, and timestamp. In other words, design the custom cell with the proper Auto Layout settings. You will also need to augment the model classes.
-- [x] User can pull to refresh
-- [x] User can compose a new tweet by tapping on a compose button.
-- [x] User can tap on a tweet to view it, with controls to retweet, favorite, and reply.
+- [x] Hamburger menu
+ - Dragging anywhere in the view should reveal the menu.
+ - The menu should include links to your profile, the home timeline, and the mentions view.
+- [x] Profile page
+ - Contains the user header view
+ - Contains a section with the users basic stats: # tweets, # following, # followers
+- [x] Home Timeline
+ - Tapping on a user image should bring up that user's profile page
+# Optional
+- [x] Account switching
+ - Tap account to switch to
+ - Include a plus button to Add an Account
 
 # Optional Tasks
 - [x] User should be able to unfavorite
