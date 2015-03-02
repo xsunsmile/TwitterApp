@@ -9,7 +9,8 @@
 import UIKit
 
 class MainViewController: UIViewController,
-                          MenuDelegate
+                          MenuDelegate,
+                          AccountSwitch
 {
 
     var storyBoard = UIStoryboard(name: "Main", bundle: nil)
@@ -19,6 +20,7 @@ class MainViewController: UIViewController,
     var burgerNavVC: UINavigationController?
     var profileNavVC: UINavigationController?
     var metionsNavVC: UINavigationController?
+    var accountNavVC: UINavigationController?
     
     var menuIsOpen = false
     var dragBeganPointX: CGFloat?
@@ -30,6 +32,9 @@ class MainViewController: UIViewController,
         super.viewDidLoad()
         
         applyPlainShadow(containerView)
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "userDidLogout", name: userDidLogoutNotification, object: nil)
+        
         initMenuView()
         initTimelineView()
     }
@@ -51,39 +56,43 @@ class MainViewController: UIViewController,
         let burgerVC = burgerNavVC?.childViewControllers[0] as BergerViewController
         burgerVC.delegate = self
         
-        addChildViewController(burgerNavVC!)
-        burgerNavVC?.view.frame = menuView.bounds
-        
-        menuView.addSubview(burgerNavVC!.view)
-        burgerNavVC?.didMoveToParentViewController(self)
+        initViewController(menuView, controller: burgerNavVC!)
+    }
+    
+    func initAccountView() {
+        if accountNavVC == nil {
+            accountNavVC = storyBoard.instantiateViewControllerWithIdentifier("AccountNavView") as? UINavigationController
+            let accountVC = accountNavVC?.childViewControllers[0] as AccountViewController
+            accountVC.delegate = self
+        }
     }
     
     func initTimelineView() {
         removeSubviewFromContainer()
         viewInContainer = "HomeTimelineNav"
         homeTimelineNavVC = storyBoard.instantiateViewControllerWithIdentifier("HomeTimelineNav") as? UINavigationController
-        initViewController(homeTimelineNavVC!)
+        initViewController(containerView, controller: homeTimelineNavVC!)
     }
     
     func initProfileView() {
         removeSubviewFromContainer()
         viewInContainer = "ProfileNavController"
         profileNavVC = storyBoard.instantiateViewControllerWithIdentifier("ProfileNavController") as? UINavigationController
-        initViewController(profileNavVC!)
+        initViewController(containerView, controller: profileNavVC!)
     }
     
     func initMetionsView() {
         removeSubviewFromContainer()
         viewInContainer = "MentionsNavController"
         metionsNavVC = storyBoard.instantiateViewControllerWithIdentifier("MentionsNavController") as? UINavigationController
-        initViewController(metionsNavVC!)
+        initViewController(containerView, controller: metionsNavVC!)
     }
     
-    func initViewController(controller: UIViewController) {
+    func initViewController(container: UIView, controller: UIViewController) {
         addChildViewController(controller)
-        controller.view.frame = containerView.bounds
+        controller.view.frame = container.bounds
         
-        containerView.addSubview(controller.view)
+        container.addSubview(controller.view)
         controller.didMoveToParentViewController(self)
     }
     
@@ -175,6 +184,56 @@ class MainViewController: UIViewController,
             break
         default:
             println()
+        }
+    }
+    
+    func onUserSwitch() {
+        initAccountView()
+        let views = (frontView: burgerNavVC, backView: accountNavVC)
+        let transitionOptions = UIViewAnimationOptions.TransitionCurlUp
+        
+        UIView.transitionWithView(menuView, duration: 1.0, options: transitionOptions, animations: {
+            self.removeVC(views.frontView!)
+            
+            let nvc = views.backView as UINavigationController?
+            let avc = nvc!.childViewControllers[0] as AccountViewController
+            self.initViewController(self.menuView, controller: views.backView!)
+        }, completion: { finished in
+                // any code entered here will be applied
+                // .once the animation has completed
+        })
+    }
+    
+    func switchAccount(user: User) {
+        println("switch account called for user \(user.name())")
+        User.currentUser = user
+        let token = user.getAccessToken()
+        println("switch to new token \(token.token)")
+        TwitterClient.sharedInstance.requestSerializer.removeAccessToken()
+        TwitterClient.sharedInstance.requestSerializer.saveAccessToken(token)
+        
+        let views = (backView: burgerNavVC, frontView: accountNavVC)
+        let transitionOptions = UIViewAnimationOptions.TransitionCurlUp
+        
+        UIView.transitionWithView(menuView, duration: 1.0, options: transitionOptions, animations: {
+            let nvc = views.frontView as UINavigationController?
+            let avc = nvc!.childViewControllers[0] as AccountViewController
+            avc.refresh()
+            self.removeVC(views.frontView!)
+            var vc = views.backView as UINavigationController?
+            let bvc = vc!.childViewControllers[0] as BergerViewController
+            bvc.refreshUserInfo()
+            
+            self.initViewController(self.menuView, controller: views.backView!)
+        }, completion: { finished in
+                // any code entered here will be applied
+                // .once the animation has completed
+        })
+    }
+    
+    func userDidLogout() {
+        if User.currentUser != nil {
+           onUserSwitch()
         }
     }
     

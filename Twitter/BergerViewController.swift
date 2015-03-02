@@ -11,6 +11,7 @@ import UIKit
 protocol MenuDelegate: class {
     func onProfileImageTouched()
     func onMenuItemSelected(index: NSInteger)
+    func onUserSwitch()
 }
 
 var twitterMenuItems = [
@@ -33,13 +34,25 @@ class BergerViewController: UIViewController,
         User.logout()
     }
     
+    @IBAction func onUserSwitch(sender: UIButton) {
+        delegate?.onUserSwitch()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         navigationController!.navigationBar.barStyle = UIBarStyle.Black
         navigationController!.navigationBar.tintColor = UIColor.whiteColor()
         navigationController!.navigationBar.barTintColor = UIColor(red: 0.07, green: 0.56, blue: 0.85, alpha: 1.0)
+       
+        tableView.delegate = self
+        tableView.dataSource = self
+        tableView.rowHeight = UITableViewAutomaticDimension
         
+        refreshUserInfo()
+    }
+
+    func refreshUserInfo() {
         var user = User.currentUser
         var userImageUrl = user?.largeImageUrl()
         if userImageUrl != nil {
@@ -49,12 +62,8 @@ class BergerViewController: UIViewController,
         }
         userNameLabel.text = user?.name()
         userScreenNameLabel.text = user?.screenName()
-        
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.rowHeight = UITableViewAutomaticDimension
     }
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }

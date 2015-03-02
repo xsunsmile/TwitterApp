@@ -31,6 +31,11 @@ class Tweets: NSObject {
     }
     
     func getMentions() {
+        var params: NSMutableDictionary = [:]
+        if User.currentUser != nil {
+            params["user_id"] = User.currentUser?.id()
+        }
+ 
         TwitterClient.sharedInstance.performWithCompletion("1.1/statuses/mentions_timeline.json", params: nil) {
             (result, error) -> Void in
             if result != nil {

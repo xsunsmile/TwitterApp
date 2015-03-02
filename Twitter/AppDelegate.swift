@@ -32,7 +32,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func userDidLogout() {
-        window?.rootViewController = storyBoard.instantiateInitialViewController() as? UIViewController
+        if User.currentUser == nil {
+            window?.rootViewController = storyBoard.instantiateInitialViewController() as? UIViewController
+        }
     }
 
     func applicationWillResignActive(application: UIApplication) {

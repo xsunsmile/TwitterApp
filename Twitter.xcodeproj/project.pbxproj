@@ -13,6 +13,8 @@
 		931DCBF51A9646890097A460 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 931DCBF41A9646890097A460 /* Images.xcassets */; };
 		931DCBF81A9646890097A460 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 931DCBF61A9646890097A460 /* LaunchScreen.xib */; };
 		931DCC041A9646890097A460 /* TwitterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 931DCC031A9646890097A460 /* TwitterTests.swift */; };
+		933311D31AA424EF008B196B /* AccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 933311D21AA424EF008B196B /* AccountViewController.swift */; };
+		933311D51AA42637008B196B /* AccountCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 933311D41AA42637008B196B /* AccountCell.swift */; };
 		934194D41AA2FA62003C2DE4 /* MenuViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 934194D31AA2FA62003C2DE4 /* MenuViewCell.swift */; };
 		93428A931AA3D44F00EA3686 /* MetionsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93428A921AA3D44F00EA3686 /* MetionsViewController.swift */; };
 		93428A961AA4114F00EA3686 /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93428A951AA4114F00EA3686 /* UIColorExtension.swift */; };
@@ -54,6 +56,8 @@
 		931DCBFD1A9646890097A460 /* TwitterTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TwitterTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		931DCC021A9646890097A460 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		931DCC031A9646890097A460 /* TwitterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwitterTests.swift; sourceTree = "<group>"; };
+		933311D21AA424EF008B196B /* AccountViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountViewController.swift; sourceTree = "<group>"; };
+		933311D41AA42637008B196B /* AccountCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccountCell.swift; sourceTree = "<group>"; };
 		934194D31AA2FA62003C2DE4 /* MenuViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuViewCell.swift; sourceTree = "<group>"; };
 		93428A921AA3D44F00EA3686 /* MetionsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MetionsViewController.swift; sourceTree = "<group>"; };
 		93428A951AA4114F00EA3686 /* UIColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
@@ -121,13 +125,13 @@
 		931DCBEA1A9646890097A460 /* Twitter */ = {
 			isa = PBXGroup;
 			children = (
-				93428A941AA4113100EA3686 /* CoreExtesions */,
 				931DCBED1A9646890097A460 /* AppDelegate.swift */,
 				931DCBF11A9646890097A460 /* Main.storyboard */,
 				93A9916D1A9A707100EE6229 /* Views */,
 				93D659E51A964BA7005EC6E1 /* ViewControllers */,
 				93E4F0F11A99604000DB5642 /* Models */,
 				93D659E21A9648F8005EC6E1 /* API */,
+				93428A941AA4113100EA3686 /* CoreExtesions */,
 				931DCBF41A9646890097A460 /* Images.xcassets */,
 				931DCBF61A9646890097A460 /* LaunchScreen.xib */,
 				931DCBEB1A9646890097A460 /* Supporting Files */,
@@ -174,6 +178,7 @@
 			children = (
 				93A9916E1A9A709D00EE6229 /* TweetCell.swift */,
 				934194D31AA2FA62003C2DE4 /* MenuViewCell.swift */,
+				933311D41AA42637008B196B /* AccountCell.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -197,6 +202,7 @@
 				93E4F0F81A99AB6A00DB5642 /* HomeTimelineViewController.swift */,
 				93428A921AA3D44F00EA3686 /* MetionsViewController.swift */,
 				9309055E1AA2CE0B00DC0B30 /* ProfileViewController.swift */,
+				933311D21AA424EF008B196B /* AccountViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -363,8 +369,10 @@
 				93D659E71A964BD3005EC6E1 /* AppViewController.swift in Sources */,
 				93A9916F1A9A709D00EE6229 /* TweetCell.swift in Sources */,
 				93A991711A9A8BB100EE6229 /* TweetDetailsViewController.swift in Sources */,
+				933311D31AA424EF008B196B /* AccountViewController.swift in Sources */,
 				93428A931AA3D44F00EA3686 /* MetionsViewController.swift in Sources */,
 				93E4F0F91A99AB6A00DB5642 /* HomeTimelineViewController.swift in Sources */,
+				933311D51AA42637008B196B /* AccountCell.swift in Sources */,
 				934194D41AA2FA62003C2DE4 /* MenuViewCell.swift in Sources */,
 				93428A961AA4114F00EA3686 /* UIColorExtension.swift in Sources */,
 				93D659E41A964941005EC6E1 /* TwitterClient.swift in Sources */,

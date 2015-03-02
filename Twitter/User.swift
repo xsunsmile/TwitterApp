@@ -7,12 +7,12 @@
 //
 
 import UIKit
-var _currentUser: User?
+var _currentUser: [User] = []
 let currentUserKey = "kCurrentUser"
 let userDidLoginNotification = "userDidLoginNotification"
 let userDidLogoutNotification = "userDidLogoutNotification"
 
-class User: NSObject {
+class User: NSObject, Equatable {
     var dictionary: NSDictionary?
     
     init(dictionary: NSDictionary) {
@@ -42,6 +42,14 @@ class User: NSObject {
     
     func followingCount() -> NSInteger {
         return getProperty("following") as NSInteger
+    }
+    
+    func getAccessToken() -> BDBOAuth1Credential {
+        let token = getProperty("accessToken") as NSString
+        let sec = getProperty("accessSecret") as NSString
+        println("use accesstoken: \(token)")
+        println("use accessSec: \(sec)")
+        return BDBOAuth1Credential(token: token, secret: sec, expiration: nil)
     }
     
     func imageUrl() -> NSURL? {
@@ -82,7 +90,7 @@ class User: NSObject {
     func getProperty(key: NSString) -> AnyObject? {
         return dictionary![key]
     }
-    
+   
     class func logout() {
         currentUser = nil
         TwitterClient.sharedInstance.requestSerializer.removeAccessToken()
@@ -94,34 +102,66 @@ class User: NSObject {
     }
     
     class func retrieveCurrentUser() {
-        if currentUser == nil {
-            TwitterClient.sharedInstance.performWithCompletion("1.1/account/verify_credentials.json", params: nil) {
-                (result, error) -> Void in
-                if let userDict = result as? NSDictionary {
-                    self.currentUser = User(dictionary: userDict)
-                    println("User did login detected")
-                    NSNotificationCenter.defaultCenter().postNotificationName(userDidLoginNotification, object: nil)
-                }
+        TwitterClient.sharedInstance.performWithCompletion("1.1/account/verify_credentials.json", params: nil) {
+            (result, error) -> Void in
+            if let userDict = result as? NSDictionary {
+                var newDict = NSMutableDictionary()
+                newDict.addEntriesFromDictionary(userDict)
+                newDict["accessToken"] = TwitterClient.sharedInstance.requestSerializer.accessToken.token
+                newDict["accessSecret"] = TwitterClient.sharedInstance.requestSerializer.accessToken.secret
+                
+                self.currentUser = User(dictionary: newDict)
+                println("User did login detected")
+                NSNotificationCenter.defaultCenter().postNotificationName(userDidLoginNotification, object: nil)
             }
         }
     }
     
     class var currentUser: User? {
         get {
-        if _currentUser == nil {
+        if _currentUser.count == 0 {
         if let data = NSUserDefaults.standardUserDefaults().objectForKey(currentUserKey) as? NSData {
-        var dictionary = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: nil) as NSDictionary
-        _currentUser = User(dictionary: dictionary)
+        let users = NSJSONSerialization.JSONObjectWithData(data, options: nil, error: nil) as [NSDictionary]
+        for user in users {
+        _currentUser.append(User(dictionary: user))
         }
         }
-        return _currentUser
+        }
+        if _currentUser.count == 0 {
+        return nil
+    } else {
+        let u = _currentUser[0]
+        println("==========")
+        println("current user: \(u.name())")
+        println("==========")
+        return u
+        }
         }
         
         set(user) {
-            _currentUser = user
+            if user != nil {
+                if let found = find(_currentUser, user!) {
+                    _currentUser.removeAtIndex(found)
+                }
+                _currentUser.insert(user!, atIndex: 0)
+            } else {
+                if _currentUser.count > 0 {
+                    _currentUser.removeAtIndex(0)
+                }
+            }
             
-            if _currentUser != nil {
-                var data = NSJSONSerialization.dataWithJSONObject(user!.dictionary!, options: nil, error: nil)
+            println("==========")
+            for user in _currentUser {
+                println("\(user.name())")
+            }
+            println("==========")
+            
+            if _currentUser.count != 0 {
+                var rawData: NSMutableArray = []
+                for user in _currentUser {
+                    rawData.addObject(user.dictionary!)
+                }
+                var data = NSJSONSerialization.dataWithJSONObject(rawData, options: nil, error: nil)
                 NSUserDefaults.standardUserDefaults().setObject(data, forKey: currentUserKey)
             } else {
                 NSUserDefaults.standardUserDefaults().setObject(nil, forKey: currentUserKey)
@@ -129,4 +169,13 @@ class User: NSObject {
             NSUserDefaults.standardUserDefaults().synchronize()
         }
     }
+    
+    class func currentUsers() -> [User]? {
+        return _currentUser
+    }
 }
+
+func ==(a:User, b:User) -> Bool {
+    return a.id() == b.id()
+}
+ 

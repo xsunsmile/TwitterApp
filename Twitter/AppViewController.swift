@@ -21,7 +21,9 @@ class AppViewController: UIViewController {
     }
     
     @IBAction func onLogin(sender: AnyObject) {
+        println("login in a new user")
         User.login()
+        dismissViewControllerAnimated(false, completion: nil)
     }
 
     func userDidLogin() {
