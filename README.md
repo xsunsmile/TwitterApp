@@ -1,6 +1,5 @@
 # Time
-- Finished requirements: 15 hours
-- Finished optionals: 30 min
+- ~ 20 hours
 
 # Tasks
 - [x] Hamburger menu
@@ -20,4 +19,4 @@
 - [x] User should be able to unfavorite
 
 # WalkThroughs
-![walkThroughImage](https://raw.githubusercontent.com/xsunsmile/TwitterApp/master/walkThrough.gif)
+![walkThroughImage](https://raw.githubusercontent.com/xsunsmile/TwitterApp/master/walkThrough2.gif)
