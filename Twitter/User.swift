@@ -20,6 +20,10 @@ class User: NSObject {
         self.dictionary = dictionary
     }
     
+    func id() -> NSInteger {
+        return getProperty("id") as NSInteger
+    }
+    
     func name() -> NSString {
         return getProperty("name") as NSString
     }
@@ -28,9 +32,29 @@ class User: NSObject {
         return getProperty("screen_name") as NSString
     }
     
+    func followersCount() -> NSInteger {
+        return getProperty("followers_count") as NSInteger
+    }
+    
+    func tweetsCount() -> NSInteger {
+        return getProperty("statuses_count") as NSInteger
+    }
+    
+    func followingCount() -> NSInteger {
+        return getProperty("following") as NSInteger
+    }
+    
     func imageUrl() -> NSURL? {
         var url: NSURL?
         if let urlStr = getProperty("profile_image_url") as? NSString {
+            url = NSURL(string: urlStr)
+        }
+        return url
+    }
+    
+    func backgroundImageUrl() -> NSURL? {
+        var url: NSURL?
+        if let urlStr = getProperty("profile_background_image_url") as? NSString {
             url = NSURL(string: urlStr)
         }
         return url
@@ -43,6 +67,16 @@ class User: NSObject {
             url = NSURL(string: largeUrlStr)
         }
         return url
+    }
+    
+    func profileTextColor() -> UIColor {
+        let hex = getProperty("profile_text_color") as NSString
+        return UIColor(rgba: "#\(hex)")
+    }
+    
+    func profileBackgroundColor() -> UIColor {
+        let hex = getProperty("profile_background_color") as NSString
+        return UIColor(rgba: "#\(hex)")
     }
     
     func getProperty(key: NSString) -> AnyObject? {

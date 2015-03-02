@@ -11,16 +11,19 @@ import UIKit
 class HomeTimelineViewController: UIViewController,
                                   UITableViewDelegate,
                                   UITableViewDataSource,
-                                  TweetsDelegate
+                                  TweetsDelegate,
+                                  TweetCellDelegate
 {
 
     @IBOutlet weak var tableView: UITableView!
     var tweets = Tweets()
     var homeTimelineTweets: [Tweet] = []
     var refreshControl: UIRefreshControl?
-    @IBOutlet var edgePanGR: UIScreenEdgePanGestureRecognizer!
-    var originalViewCenter = CGFloat(0)
-    var menuIsClosed = true
+    
+    @IBAction func openMenu(sender: UIBarButtonItem) {
+//        var vc = view.superview?.superview as MainViewController
+//        vc.openMenu()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +37,7 @@ class HomeTimelineViewController: UIViewController,
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 200
         
         tweets.delegate = self
         
@@ -41,8 +45,6 @@ class HomeTimelineViewController: UIViewController,
         refreshControl?.attributedTitle = NSAttributedString(string: "Pull to refersh")
         refreshControl?.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
         tableView.addSubview(refreshControl!)
-        
-        originalViewCenter = view.center.x
     }
     
     func refresh() {
@@ -54,13 +56,10 @@ class HomeTimelineViewController: UIViewController,
         super.didReceiveMemoryWarning()
     }
     
-    @IBAction func onLogout(sender: AnyObject) {
-        User.logout()
-    }
-    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell = tableView.dequeueReusableCellWithIdentifier("TweetCell") as TweetCell
         cell.tweet = homeTimelineTweets[indexPath.row]
+        cell.delegate = self
         return cell
     }
     
@@ -94,5 +93,16 @@ class HomeTimelineViewController: UIViewController,
             let tweet = homeTimelineTweets[indexPath.row]
             vc.tweet = tweet
         }
+        
+        if segue.identifier == "showProfileSegue" {
+            let profileNav = segue.destinationViewController as UINavigationController
+            let vc = profileNav.childViewControllers[0] as ProfileViewController
+            let user = sender as User
+            vc.user = user
+        }
+    }
+    
+    func showUserProfile(user: User) {
+        performSegueWithIdentifier("showProfileSegue", sender: user)
     }
 }

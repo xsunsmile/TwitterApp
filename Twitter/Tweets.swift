@@ -29,4 +29,41 @@ class Tweets: NSObject {
             }
         }
     }
+    
+    func getMentions() {
+        TwitterClient.sharedInstance.performWithCompletion("1.1/statuses/mentions_timeline.json", params: nil) {
+            (result, error) -> Void in
+            if result != nil {
+                if let tweets = result as? [NSDictionary] {
+                    var homeTimelineTweets: [Tweet] = []
+                    for tweet in tweets {
+                        homeTimelineTweets.append(Tweet(dictionary: tweet))
+                    }
+                    self.delegate?.tweetsAreReady(homeTimelineTweets)
+                }
+            }
+        }
+    }
+    
+    func getUserTimeline(user_id: NSInteger?) {
+        var params: NSMutableDictionary = [:]
+        
+        if user_id != nil {
+            params["user_id"] = user_id
+        }
+        
+        TwitterClient.sharedInstance.performWithCompletion("1.1/statuses/user_timeline.json", params: params) {
+            (result, error) -> Void in
+            if result != nil {
+                if let tweets = result as? [NSDictionary] {
+                    var homeTimelineTweets: [Tweet] = []
+                    for tweet in tweets {
+                        homeTimelineTweets.append(Tweet(dictionary: tweet))
+                    }
+                    self.delegate?.tweetsAreReady(homeTimelineTweets)
+                }
+            }
+        }
+    }
+    
 }

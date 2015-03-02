@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol TweetCellDelegate: class {
+    func showUserProfile(user: User)
+}
+
 class TweetCell: UITableViewCell {
     
     @IBOutlet weak var tweetText: UILabel!
@@ -18,6 +22,7 @@ class TweetCell: UITableViewCell {
     @IBOutlet weak var reTweetButton: UIButton!
     @IBOutlet weak var favoriteButton: UIButton!
     @IBOutlet weak var replyButton: UIButton!
+    weak var delegate: TweetCellDelegate?
     
     var tweet: Tweet? {
         didSet {
@@ -25,6 +30,8 @@ class TweetCell: UITableViewCell {
             if userImageUrl != nil {
                 userImageView.setImageWithURL(userImageUrl!)
             }
+            addTapRecognizer(userImageView)
+            
             userNameLabel.text = tweet?.user()?.name()
             userScreenNameLabel.text = tweet?.user()?.screenName()
             tweetText.text = tweet?.text()
@@ -93,5 +100,20 @@ class TweetCell: UITableViewCell {
     
     override func layoutSubviews() {
         tweetText.preferredMaxLayoutWidth = tweetText.frame.size.width
+    }
+    
+    func addTapRecognizer(view: UIView) {
+        var recognizer = UITapGestureRecognizer(target: self, action: "userImageTapped:")
+        recognizer.delegate = self
+        view.addGestureRecognizer(recognizer)
+    }
+    
+    func userImageTapped(recognizer: UITapGestureRecognizer) {
+        if recognizer.state == .Ended {
+            println("user is tapped")
+            if let u = tweet?.user() {
+                delegate?.showUserProfile(u)
+            }
+        }
     }
 }

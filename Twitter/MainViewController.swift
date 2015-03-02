@@ -18,6 +18,7 @@ class MainViewController: UIViewController,
     var homeTimelineNavVC: UINavigationController?
     var burgerNavVC: UINavigationController?
     var profileNavVC: UINavigationController?
+    var metionsNavVC: UINavigationController?
     
     var menuIsOpen = false
     var dragBeganPointX: CGFloat?
@@ -61,22 +62,29 @@ class MainViewController: UIViewController,
         removeSubviewFromContainer()
         viewInContainer = "HomeTimelineNav"
         homeTimelineNavVC = storyBoard.instantiateViewControllerWithIdentifier("HomeTimelineNav") as? UINavigationController
-        addChildViewController(homeTimelineNavVC!)
-        homeTimelineNavVC?.view.frame = containerView.bounds
-        
-        containerView.addSubview(homeTimelineNavVC!.view)
-        homeTimelineNavVC?.didMoveToParentViewController(self)
+        initViewController(homeTimelineNavVC!)
     }
     
     func initProfileView() {
         removeSubviewFromContainer()
         viewInContainer = "ProfileNavController"
         profileNavVC = storyBoard.instantiateViewControllerWithIdentifier("ProfileNavController") as? UINavigationController
-        addChildViewController(profileNavVC!)
-        profileNavVC?.view.frame = containerView.bounds
+        initViewController(profileNavVC!)
+    }
+    
+    func initMetionsView() {
+        removeSubviewFromContainer()
+        viewInContainer = "MentionsNavController"
+        metionsNavVC = storyBoard.instantiateViewControllerWithIdentifier("MentionsNavController") as? UINavigationController
+        initViewController(metionsNavVC!)
+    }
+    
+    func initViewController(controller: UIViewController) {
+        addChildViewController(controller)
+        controller.view.frame = containerView.bounds
         
-        containerView.addSubview(profileNavVC!.view)
-        profileNavVC?.didMoveToParentViewController(self)
+        containerView.addSubview(controller.view)
+        controller.didMoveToParentViewController(self)
     }
     
     @IBAction func onContainerViewDrag(sender: UIPanGestureRecognizer) {
@@ -117,7 +125,7 @@ class MainViewController: UIViewController,
     func openMenu() {
         UIView.animateWithDuration(1, animations: { () -> Void in
             self.menuView.alpha = 1
-            self.containerView.transform = CGAffineTransformMakeTranslation(300, 0)
+            self.containerView.transform = CGAffineTransformMakeTranslation(250, 0)
         })
         self.menuIsOpen = true
     }
@@ -134,6 +142,11 @@ class MainViewController: UIViewController,
                 removeVC(profileNavVC!)
             }
             break
+        case "MentionsNavController":
+            if metionsNavVC != nil {
+                removeVC(metionsNavVC!)
+            }
+            break
         default:
             println()
         }
@@ -148,6 +161,21 @@ class MainViewController: UIViewController,
     func onProfileImageTouched() {
         closeMenu()
         initProfileView()
+    }
+    
+    func onMenuItemSelected(index: NSInteger) {
+        switch(index) {
+        case 0:
+            closeMenu()
+            initTimelineView()
+            break
+        case 1:
+            closeMenu()
+            initMetionsView()
+            break
+        default:
+            println()
+        }
     }
     
     /*
