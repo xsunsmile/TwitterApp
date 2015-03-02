@@ -194,9 +194,6 @@ class MainViewController: UIViewController,
         
         UIView.transitionWithView(menuView, duration: 1.0, options: transitionOptions, animations: {
             self.removeVC(views.frontView!)
-            
-            let nvc = views.backView as UINavigationController?
-            let avc = nvc!.childViewControllers[0] as AccountViewController
             self.initViewController(self.menuView, controller: views.backView!)
         }, completion: { finished in
                 // any code entered here will be applied
@@ -228,6 +225,7 @@ class MainViewController: UIViewController,
         }, completion: { finished in
                 // any code entered here will be applied
                 // .once the animation has completed
+            self.initTimelineView()
         })
     }
     

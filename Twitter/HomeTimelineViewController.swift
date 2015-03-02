@@ -45,6 +45,7 @@ class HomeTimelineViewController: UIViewController,
         refreshControl?.attributedTitle = NSAttributedString(string: "Pull to refersh")
         refreshControl?.addTarget(self, action: "refresh", forControlEvents: UIControlEvents.ValueChanged)
         tableView.addSubview(refreshControl!)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "refresh", name: userDidLoginNotification, object: nil)
     }
     
     func refresh() {

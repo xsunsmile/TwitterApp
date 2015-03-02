@@ -32,6 +32,9 @@ class AccountViewController: UIViewController,
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 120
         
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "refresh", name: userDidLoginNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "refresh", name: userDidLogoutNotification, object: nil)
+        
         refresh()
     }
     
