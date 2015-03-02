@@ -15,6 +15,8 @@
 - [x] Account switching
  - Tap account to switch to
  - Include a plus button to Add an Account
+ - Logout one user
 
 # WalkThroughs
 ![walkThroughImage](https://raw.githubusercontent.com/xsunsmile/TwitterApp/master/walkThrough2.gif)
+![walkThroughImage](https://raw.githubusercontent.com/xsunsmile/TwitterApp/master/walkThroughLogins.gif)
